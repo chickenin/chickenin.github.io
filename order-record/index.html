@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font/roboto.css" rel="stylesheet">
+	
+    <link href="fontawesome/css/all.css" rel="stylesheet">
+	
+	<script src="sw.js"></script>
+	
+	<script type="module" src="index.js"></script>
+	<style>
+	body {
+		font-family: 'Roboto', sans-serif;
+		background-color: #dfdfdf;
+		color: #0a0a0a;
+	}
+	.menu-item-options>li{
+		background-color: #1a1a1a;
+	}
+	.menu-item-options>li:hover{
+		opacity : 90%;
+		color: #0a0a0a;
+		background-color: #2d2d2d;
+	}
+	.card-menu-title{
+		position: absolute;
+		bottom: 0px;
+		font-size: 0.70rem;
+		padding: 0.25rem 0.5rem;
+		margin: 0.4rem -0.2rem;
+		background:#123444;
+		color:white;
+	}
+	.card-menu-title-tumbnail{
+		font-size: 0.525rem;
+		padding: 0.1rem 0.2rem;
+		margin: 0.25rem -0.75rem;
+	}
+	.menu-btn:active{
+		margin: 0.1rem;
+		opacity : 90%;
+	}
+	@media screen and (max-width: 767px) {
+		#menu-options>.modal-dialog {margin:0 4rem;}
+		#order-div{margin-top:-1.25rem;margin-bottom:1rem;height:12.5rem !important;}
+	}
+	.shadow-inside {
+	   -moz-box-shadow:    inset 0 0 1rem #b5b5b5;
+	   -webkit-box-shadow: inset 0 0 1rem #b5b5b5;
+	   box-shadow:         inset 0 0 1rem #b5b5b5;
+	}
+	.menu-done-btn, .menu-entery-btn, #deleteEntryMenuOption, #setQRISEntryMenu, #add-online-order, .mix-flavour{
+		cursor: pointer;
+	}
+	
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		/* display: none; <- Crashes Chrome on hover */
+		-webkit-appearance: none;
+		margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+	}
+	input[type=number] {
+		-moz-appearance:textfield; /* Firefox */
+	}
+	</style>
+    <title>CHICKENIN  - ORDER RECORD</title>
+  </head>
+  <body>
+	<nav class="navbar navbar-light shadow-sm rounded" style="background-color: #fee914;">
+		<div class="container-fluid">
+			<div class="col-2 col-sm-2 text-center">
+				<button style="border: none;box-shadow: none;" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+					<img style="max-height:2rem;" src="img/chickenin-icon.jpeg"/>
+				</button>
+			</div>
+			<div class="col-8 col-sm-8 text-center">
+				<small><strong>CHICKENIN ORDER RECORD</strong></small>
+			</div>
+			<div class="col-2 col-sm-2 text-center">
+				<span style="font-size:0.5rem;"><i id="online-status-identifier" style="color: #6c757d;" class="fas fa-circle"></i></span>
+			</div>
+			<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" style="background-color: #fee914;">
+				<div class="offcanvas-header">
+					<h5 class="offcanvas-title" id="offcanvasNavbarLabel"><img style="max-height:2.5rem;" src="img/chickenin-icon.jpeg"/> CHICKENIN ORDER RECORD</h5>
+					<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+				</div>
+				<div class="offcanvas-body">
+					<ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+						<li class="nav-item">
+							<a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">History Record</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
+	
+	<div class="container mt-0 pt-3">
+		<div class="row mt-0 mb-1">
+			<div id="order-div" class="col-sm-4 rounded shadow-inside pt-3" style="position:relative;height:100%;height:19.4rem;overflow-x: hidden; overflow-y: auto;background-color: #f6f6f6;">
+				<table class="table table-striped table-hover mb-4">
+					  <tbody id="orders" style="height:2rem;max-height:2rem;overflow-y: auto;">
+							<tr>
+								<td>
+									<div class="text-center mt-5 pt-3 text-muted">
+										<i class="far fa-smile-wink"></i> <br/>
+										<small>
+											Loading data<br/>
+											<div class="spinner-grow spinner-grow-sm text-warning" role="status">
+											</div>
+											<div class="spinner-grow spinner-grow-sm text-warning" role="status">
+											</div>
+											<div class="spinner-grow spinner-grow-sm text-warning" role="status">
+											</div>
+											<div class="spinner-grow spinner-grow-sm text-warning" role="status">
+											</div>
+											<div class="spinner-grow spinner-grow-sm text-warning" role="status">
+											</div>
+											<div class="spinner-grow spinner-grow-sm text-warning" role="status">
+											</div>
+											<div class="spinner-grow spinner-grow-sm text-warning" role="status">
+											</div>
+											<div class="spinner-grow spinner-grow-sm text-warning" role="status">
+											</div>
+										</small>
+									</div>
+								</td>
+							</tr>
+					  </tbody>
+				</table>
+				<div id="entryMenutOptionAll" style="position: absolute;bottom:0; display: flex; justify-content: center; align-items: center;" class="input-group mb-3 visually-hidden text-center">
+					<button id="deleteAllEntryMenu" type="submit" class="btn btn-sm btn-danger me-3"><i class="fas fa-trash"></i> <small>Hapus Semua</small></button>
+					<button id="doneAllEntryMenu" type="submit" class="btn btn-sm btn-secondary ms-3"><i class="fa fa-check-circle"></i> <small>Selesai Semua</small></button>
+				</div>
+			</div>
+			<div id="menu-list" class="col-sm-8 text-center d-inline align-middle mt-5 pt-5" style="min-height:19.4rem">
+				<div class="spinner-border text-secondary" role="status" style="width: 5rem; height: 5rem;">
+				  <span class="visually-hidden">Loading...</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+		
+	</div>
+		
+	<!-- MODAL -->
+	
+	<div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="menuoptions">
+	   <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable d-flex">
+		<div class="modal-content text-white text-opacity-75" style="background-color: #1a1a1a;">
+			<div class="row ms-2 me-2 mb2 mt-3">
+				<div class="col-12 col-sm-12 mt-2">
+					<span>
+						<h6 id="confirm-modal-text">. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . </h6>
+					</span>
+				</div>
+			</div>
+			<div class="row">
+				<hr class="mb-0 mt-3"/>
+			</div>
+			<div class="row">
+				<div class="input-group mb-3 mt-3">
+					<div class="container container-fluid">
+						<div class="row">
+							<div class="col-6 col-sm-6">
+								<button style="width:100%;" type="submit" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Batal</button>
+							</div>
+							<div class="col-6 col-sm-6">
+								<button id="confirm-modal-yes" style="width:100%;" type="submit" class="btn btn-primary">Ya</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	<div class="modal fade" id="menu-options" tabindex="-1" role="dialog" aria-labelledby="menuoptions">
+	   <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable d-flex">
+		<div class="modal-content text-white text-opacity-75" style="background-color: #1a1a1a;">
+			<div class="row ms-2 me-2 mb2 mt-3">
+				<div class="col-4 col-sm-4">
+					<div class="menu-btn btn btn-outline-light card shadow-sm bg-body rounded p-1"><img class="card-image menu-options-tumbnail" alt="Cabe Pedas"><div class="card-img-overlay"><h5 class="menu-options-name card-title card-menu-title card-menu-title-tumbnail"></h5></div></div>
+				</div>
+				<div class="col-8 col-sm-8 mt-2">
+					<span>
+						<h6 class="menu-options-category"></h6>
+						<h5 class="menu-options-name"></h5>
+					</span>
+				</div>
+			</div>
+			<div class="row">
+				<hr class="mb-0 mt-3"/>
+			</div>
+			<div class="row">
+				<ul class="list-group menu-item-options ps-3 pe-3">
+				  <li id="add-online-order" class="list-group-item text-white text-opacity-75 pd-2 pt-2">Online Order</li>
+				</ul>
+			</div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	<div class="modal fade" id="menu-entry-options" tabindex="-1" role="dialog" aria-labelledby="menuoptions">
+	   <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable d-flex">
+		<div class="modal-content text-white text-opacity-75" style="background-color: #1a1a1a;">
+			<div class="row ms-2 me-2 mb2 mt-3">
+				<div class="col-8 col-sm-8 mt-2">
+					<span>
+						<h5 class="menu-entry-options-name"></h5>
+					</span>
+				</div>
+			</div>
+			<div class="row">
+				<hr class="mb-0 mt-3"/>
+			</div>
+			<div class="row">
+				<ul class="list-group menu-item-options ps-3 pe-3">
+				  <li id="editEntryMenu" class="list-group-item text-white text-opacity-75 pd-2 pt-2">Edit</li>
+				  <li id="setQRISEntryMenu" class="list-group-item text-white text-opacity-75 pd-2 pt-2">Jadi QRIS</li>
+				  <li id="deleteEntryMenuOption" class="list-group-item text-danger text-opacity-75 pd-2 pt-2">Hapus</li>
+				</ul>
+			</div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	<div class="modal fade" id="edit-menu-entry" tabindex="-1" role="dialog" aria-labelledby="menuoptions">
+	   <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable d-flex">
+		<div class="modal-content text-white text-opacity-75" style="background-color: #1a1a1a;">
+			<div class="row ms-2 me-2 mb2 mt-3">
+				<div class="col-12 col-sm-12 mt-2">
+					<span>
+						<h5><i class="far fa-edit"></i> <span class="menu-entry-options-name"></span></h5>
+					</span>
+				</div>
+			</div>
+			<div class="row">
+				<hr class="mb-0 mt-3"/>
+			</div>
+			<div class="row">
+				<div class="input-group mb-3">
+					<span class="input-group-text text-muted" id="basic-addon1" style="border:none;background:transparent;">Nama </span>
+					<input id="edit-menu-entry-name" type="text" class="form-control text-white" style="border:none;background:transparent;"  placeholder="Nama Menu" aria-label="Username" aria-describedby="basic-addon1">
+				</div>
+				<div class="input-group mb-3">
+					<span class="input-group-text text-muted" id="basic-addon1" style="border:none;background:transparent;">Harga </span>
+					<input id="edit-menu-entry-price" type="number" class="form-control text-white" style="border:none;background:transparent;" placeholder="Harga Menu" aria-label="Username" aria-describedby="basic-addon1">
+				</div>
+				<div class="input-group mb-3">
+					<span class="input-group-text text-muted" id="basic-addon1" style="border:none;background:transparent;">Pembayaran </span>
+					<select id="edit-menu-entry-pay-options-list" class="form-select text-white" style="border:none;background:transparent;" aria-label="Default select example">
+					</select>
+				</div>
+				<div class="input-group mb-3">
+					<div class="container container-fluid">
+						<div class="row">
+							<div class="col-6 col-sm-6">
+								<button style="width:100%;" type="submit" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Batal</button>
+							</div>
+							<div class="col-6 col-sm-6">
+								<button id="edit-menu-entry-update-data" style="width:100%;" type="submit" class="btn btn-primary">Ubah</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="fontawesome/js/all.js"></script>
+  
+	<script>
+		function RemoveInnerTextUnderScore(element = document.body){
+			var currentText = element.innerText;
+			element.innerText.split("\n").forEach(function (utext) {
+			if (utext.indexOf('_') > -1)
+				{
+					var regutext = new RegExp(utext, 'g');
+					element.innerHTML = element.innerHTML.replace(regutext, utext.replace(/_/g, ' '));
+				}
+			});
+			
+			if(currentText != element.innerText)
+				return true;
+			else
+				return false;
+		}
+		
+		if (typeof(sw) == "undefined") {
+			sw = new Worker("sw.js");
+			sw.onmessage = function(event) {
+				console.log(event.data);
+				if(event.data.type == 'onlineStat'){
+					localStorage.setItem("onlineStat", event.data.data);
+					colorStat = (event.data.data=='online'?'#39bd39':'#f91a1a');
+					
+					colors = [colorStat,'#6c757d'];
+					
+					$("#online-status-identifier").css('color', colorStat);
+					
+					var i = 0, delay=300;
+					const interval = setInterval(function() {
+						setTimeout(function(){ $("#online-status-identifier").css('color', colors[ i % 2]);}, delay);
+						if(i>12)
+								clearInterval(interval); // thanks @Luca D'Amico
+						i++;
+					}, delay);
+	
+				}
+			};
+		}
+	</script>
+	<script>
+		let selectedMenu,selectedEntryMenu,menuOnLongTouch,menuEntryOnLongTouch,menuTouchTimer;
+		let touchduration = 700; //length of time we want the user to touch before we do something
+		
+		let payTypeIcons = {
+			'cash' : 'fa-cash-register',
+			'qris' : 'fa-qrcode',
+			'apps' : 'fa-motorcycle'
+		}
+		
+		let payTypeDilaUnderstand = {
+			'cash' : 'Tunai',
+			'qris' : 'QRIS',
+			'apps' : 'Online'
+		}
+		
+		var touchDev = ((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i).test(navigator.userAgent));
+		
+		var myDown = touchDev ? "touchstart" : "mousedown";
+		var myUp = touchDev ? "touchend" : "mouseup";
+		
+		function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
+		
+		function checkOverflowY(el){ return (el.offsetHeight < el.scrollHeight); }
+		function checkOverflowX(el){ return (el.offsetWidth < el.scrollWidth); }
+		
+		$(function() {
+			var dragging = false;
+		  
+			$("body").on("touchmove", function(){
+				clearTimeout(menuTouchTimer);
+				dragging = true;
+			}).on("touchstart", function(){
+				dragging = false;
+			});
+			
+			function getJsonLS(itemName){
+				return JSON.parse(localStorage.getItem(itemName).replace(/[$]/g, '\"'));
+			}
+		
+			function setJsonLS(itemName, datas){
+				return localStorage.setItem(itemName, JSON.stringify(datas).replace(/\["]/g, '$'));
+			}
+			
+			function confirmdialog(message, yesCallback) {
+				$('#confirm-modal-text').text(message);
+				var confirmmodal = $('#confirm-modal');
+				confirmmodal.modal("show");
+
+				$('#confirm-modal-yes').off('click');
+				$('#confirm-modal-yes').click(function() {
+					confirmmodal.modal("hide");
+					yesCallback();
+				});
+			}
+		
+			function eventListenerDrawEntryMenu(){
+				$(".menu-entery-btn").each(function(){
+					$(this).on('contetxmenu', function(e) { e.preventDefault(); return false; }, false);
+					$(this).children(".longtouchable").bind(myDown, function(e){
+						selectedEntryMenu=$($(this).parent()).data();
+						menuTouchTimer = setTimeout(menuEntryOnLongTouch, touchduration);
+					}).bind(myUp, function(e){
+						if (dragging)
+							return;
+						if(menuTouchTimer){
+							clearTimeout(menuTouchTimer);
+						}
+					});
+				});
+				
+				$(".menu-done-btn").each(function(){
+					$(this).bind(myUp, function(e){
+						dataOrder = $($(this).parent()).data();
+						pushOrderHistory = [];
+						if(localStorage.getItem("pushOrderHistory")){
+							pushOrderHistory=JSON.parse(localStorage.getItem("pushOrderHistory"));
+						}
+						
+						pushOrderHistory.push(dataOrder);
+						
+						localStorage.setItem("pushOrderHistory", JSON.stringify(pushOrderHistory));
+						
+						deleteEntryMenu(dataOrder.id);
+					});
+				});
+			}
+		
+			function addEntryMenu(menuData, elementId = 'orders'){
+				if(typeof menuData.paytype == 'undefined'){
+					menuData.paytype = 'cash';
+				}
+				
+				entryMenu = [];
+				if(localStorage.getItem("entryMenu")){
+					entryMenu=getJsonLS("entryMenu");
+				}
+				
+				delete menuData.image;
+				
+				entryMenu.push(menuData);
+				
+				setJsonLS("entryMenu", entryMenu);
+				
+				drawEntryMenu();
+			}
+		
+			function updateEntryMenu(indexEntry='string', propertiesUpdate='string'){
+				console.log(propertiesUpdate);
+				console.log(typeof propertiesUpdate);
+				if(isNumber(indexEntry) && typeof propertiesUpdate === 'object'){
+					entryMenu = [];
+					if(localStorage.getItem("entryMenu")){
+						entryMenu=getJsonLS("entryMenu");
+					}
+					
+					$.each(propertiesUpdate, function(key,val){
+							entryMenu[indexEntry][key] = val;
+					});
+					
+					console.log(entryMenu);
+					
+					setJsonLS("entryMenu", entryMenu);
+					
+					drawEntryMenu();
+				}
+			}
+		
+			function deleteEntryMenu(indexEntry='string', elementId = 'orders'){
+				if(isNumber(indexEntry)){
+					console.log(indexEntry);
+					entryMenu = [];
+					if(localStorage.getItem("entryMenu")){
+						entryMenu=getJsonLS("entryMenu");
+					}
+					
+					entryMenu.splice(indexEntry, 1);
+					
+					if(entryMenu.length>0){
+						setJsonLS("entryMenu", entryMenu);
+					}else{
+						localStorage.removeItem("entryMenu");
+					}
+				}else{
+					if(indexEntry=='all'){
+						$("#"+elementId).append('<tr><td><div class="text-center mt-5 pt-3 text-muted"><small>Tak ada data <i class="far fa-smile-wink"></i></small></div></td></tr>');
+						$("#"+elementId).parent().removeClass("table-striped table-hover");
+						localStorage.removeItem("entryMenu");
+					}
+				}
+				
+				drawEntryMenu();
+			}
+		
+			function drawEntryMenu(elementId = 'orders'){
+				
+				$("#"+elementId).children().remove();
+				if(localStorage.getItem("entryMenu")){
+					thisParent = $("#"+elementId).parent();
+					thisParent.addClass("table-striped table-hover");
+					entryMenu=getJsonLS("entryMenu");
+					$.each(entryMenu, function( index, data ) {
+						var order = $('<tr id="entrymenu-'+index+'" class="menu-entery-btn" data-id="'+index+'"></tr>');
+						$.each(data, function(key,val){
+									order.attr('data-'+key, val);
+						});
+						
+						paytypeIcon = payTypeIcons[data.paytype];
+						
+						order.append('<th class="longtouchable"scope="row"><small><i class="fas '+paytypeIcon+' text-opacity-50"></i></small></th>');
+						order.append('<td class="longtouchable"><small>'+data.name+'</small></td>');
+						order.append('<td class="longtouchable"><small>Rp '+data.price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')+'</small></td>');
+						order.append('<td class="text-center menu-done-btn"><i class="fas fa-check-circle"></i></td>');
+						$("#"+elementId).append(order);
+					});
+					
+					if(checkOverflowY($("#order-div")[0])){
+						$("#order-div").css({position: 'unset'});
+						$("#entryMenutOptionAll").css({position: 'unset'});
+					}else{
+						$("#order-div").css({position: 'relative'});
+						$("#entryMenutOptionAll").css({position: 'absolute'});
+					}
+					
+					console.log("entryMenu =  "+entryMenu.length);
+					
+					if(entryMenu.length>1) 
+						$("#entryMenutOptionAll").removeClass("visually-hidden");
+					else
+						$("#entryMenutOptionAll").addClass("visually-hidden");
+						
+					eventListenerDrawEntryMenu();
+					
+				}else{
+					$("#entryMenutOptionAll").addClass("visually-hidden");
+					$("#"+elementId).append('<tr><td><div class="text-center mt-5 pt-3 text-muted"><small>Tak ada data <i class="far fa-smile-wink"></i></small></div></td></tr>');
+					$("#"+elementId).parent().removeClass("table-striped table-hover");
+					
+				}
+			}
+		
+			menuOnLongTouch = function(){
+				menuTouchTimer = false;
+				console.log(menuTouchTimer);
+				$('.menu-options-name').text(selectedMenu.name);
+				$('.menu-options-category').text(selectedMenu.category);
+				$('.menu-options-tumbnail').attr('src', selectedMenu.image);
+				$.each(selectedMenu, function(key,val){
+					$('#menu-options').attr('data-'+key, val);
+				});
+				
+				$(".mix-flavour").removeClass("visually-hidden");
+				
+				if(selectedMenu.category=='Tambahan'){
+					$(".mix-flavour").addClass("visually-hidden");
+				}else{
+					$(".mix-flavour").removeClass("visually-hidden");
+				}
+				
+				$(".flavour-"+selectedMenu.name.replace(/[ ]/g, '-')).addClass("visually-hidden");
+				
+				$('#menu-options').modal('show');
+				
+			}
+			
+			menuEntryOnLongTouch = function(){
+				menuTouchTimer = false;
+				console.log(menuTouchTimer);
+				$('.menu-entry-options-name').text(selectedEntryMenu.name);
+				$.each(selectedEntryMenu, function(key,val){
+					$('#menu-entry-options').attr('data-'+key, val);
+				});
+				$('#menu-entry-options').modal('show');
+			}
+			
+			function drawMenuList(){
+			/* Waiting firebase load the menu items list*/
+				if(localStorage.getItem("menuItems")){
+					menuItems = JSON.parse(localStorage.getItem("menuItems"));
+				
+					$.each(menuItems, function(cat,menu){
+						$("#menu-list").append($('<div class="row mb-1"></div>').html('<h5>'+cat+'</h5>'));
+						let menus = $('<div class="row"></div>');
+						$.each(menu, function(name,data){
+							let menubtn= $('<div class="menu-btn btn btn-outline-light card shadow-sm bg-body rounded"></div>');
+							menubtn.attr('data-name', name);
+							menubtn.attr('data-category', cat);
+							$.each(data, function(key,val){
+								menubtn.attr('data-'+key, val);
+							});
+							menubtn.append('<img src="'+data['image']+'" class="card-image" alt="'+name+'">');
+							menubtn.append('<div class="card-img-overlay"><h5 class="card-title card-menu-title" data-price="'+data['price']+'">'+name+'</h5></div>');
+							let menu = $('<div class="col-4 col-sm-2 mb-3"></div>').html(menubtn);
+							
+							menus.append(menu);
+						});
+						$("#menu-list").append(menus);
+					});
+					
+					$("#menu-list").children(".spinner-border").remove()
+					$("#menu-list").removeClass("text-center d-inline align-middle mt-5 pt-5");
+					
+					RemoveInnerTextUnderScore($("#menu-list")[0]);
+					
+					$(".menu-btn").each(function(){
+						$(this).on('contetxmenu', function(e) { e.preventDefault(); return false; }, false);
+						$(this).bind(myDown, function(e){
+							selectedMenu=$(this).data();
+							menuTouchTimer = setTimeout(menuOnLongTouch, touchduration);
+						}).bind(myUp, function(e){
+							if (dragging)
+								return;
+							if(menuTouchTimer){
+								clearTimeout(menuTouchTimer);
+								selectedMenu=$(this).data();
+								
+								selectedMenu.paytype='cash';
+								
+								addEntryMenu(selectedMenu);
+							}
+						});
+					});
+					
+					$.each(menuItems.Little_Shihlin, function(name,data){
+						$("#add-online-order").parent().append('<li class="mix-flavour flavour-'+name.replace(/_/g, '-')+' list-group-item text-white text-opacity-75 pd-2 pt-2"><sup><i class="fas fa-plus"></i></sup> '+name.replace(/_/g, ' ')+'</li>');
+					});
+					
+					$.each(payTypeDilaUnderstand, function(sysname, frontname){
+						$("#edit-menu-entry-pay-options-list").append('<option value="'+sysname+'">'+frontname+'</option>');
+					});
+					
+				}else{
+					setTimeout(drawMenuList, 100);
+				}
+			}
+
+			drawMenuList();
+			drawEntryMenu();
+			
+			$("#editEntryMenu").bind(myUp, function(){
+				$("#edit-menu-entry-name").val(selectedEntryMenu.name).change();
+				$("#edit-menu-entry-price").val(selectedEntryMenu.price).change();
+				$("#edit-menu-entry-pay-options-list").val(selectedEntryMenu.paytype).change();
+				$("#menu-entry-options").modal('hide');
+				$("#edit-menu-entry").modal('show');
+			});
+			
+			$("#edit-menu-entry-update-data").bind(myUp, function(){
+				updateEntryMenu(selectedEntryMenu.id, {
+					name: $("#edit-menu-entry-name").val(), 
+					paytype: $("#edit-menu-entry-pay-options-list").val(), 
+					price: $("#edit-menu-entry-price").val()
+				});
+				$("#edit-menu-entry").modal('hide');
+			});
+			
+			$("#setQRISEntryMenu").bind(myUp, function(){
+				if (dragging)
+					return;
+				if(selectedEntryMenu.category == 'Little Shihlin'){
+					selectedEntryMenu.price = selectedEntryMenu.price-(Number(((0.7 * 20000) / 100).toFixed(2)) + 3000);
+				}
+				
+				updateEntryMenu(selectedEntryMenu.id, {paytype:'qris', price:selectedEntryMenu.price});
+				$("#menu-entry-options").modal('hide');
+			});
+			$("#deleteEntryMenuOption").bind(myUp, function(){
+				if (dragging)
+					return;
+				deleteEntryMenu(selectedEntryMenu.id);
+				$("#menu-entry-options").modal('hide');
+			});
+			$("#deleteAllEntryMenu").bind(myUp, function(){
+				if (dragging)
+					return;
+				confirmdialog('Kamu yakin ingin menghapus semua pesanan yang belum selesai?',
+					function(){
+						deleteEntryMenu('all');
+					}
+				);
+			});
+			$("#doneAllEntryMenu").bind(myUp, function(){
+				if (dragging)
+					return;
+				confirmdialog('Kamu yakin ingin menyelesaikan semua pesanan?',
+					function(){
+						const intervalDoneAllEntry = setInterval(function() {
+							
+							dataOrder = $($($(".menu-done-btn")[0]).parent()).data();
+							pushOrderHistory = [];
+							if(localStorage.getItem("pushOrderHistory")){
+								pushOrderHistory=JSON.parse(localStorage.getItem("pushOrderHistory"));
+							}
+							
+							pushOrderHistory.push(dataOrder);
+							
+							localStorage.setItem("pushOrderHistory", JSON.stringify(pushOrderHistory));
+							
+							deleteEntryMenu(dataOrder.id);
+							
+							if($(".menu-done-btn").length<=0 || typeof $(".menu-done-btn").length == 'undefined'){
+								clearInterval(intervalDoneAllEntry); 
+							}
+						}, 500);
+					}
+				);
+			});
+			
+			$("#add-online-order").bind(myUp, function(){
+				if (dragging)
+					return;
+				selectedMenu.paytype = 'apps';
+				
+				if(selectedMenu.category == 'Little Shihlin'){
+					selectedMenu.price = 22500-(Number(((20 * 22500) / 100).toFixed(2)) + 1000);
+				}
+				if(selectedMenu.name == 'Nasi'){
+					selectedMenu.price = 5000-(Number(((20 * 5000) / 100).toFixed(2)) + 1000);
+				}
+				
+				addEntryMenu(selectedMenu);
+				$("#menu-options").modal('hide');
+			});
+			$(".mix-flavour").each(function(){
+				if (dragging)
+					return;
+				$(this).bind(myUp, function(){
+					selectedMenu.paytype = 'cash';
+					selectedMenu.name = selectedMenu.name+' + '+$(this).text();
+					addEntryMenu(selectedMenu);
+					$("#menu-options").modal('hide');
+				});
+			});
+		});
+	</script>
+</body>
+</html>
