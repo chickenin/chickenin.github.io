@@ -38,12 +38,8 @@ function writeMenuData(category, name, datas) {
   set(ref(db, 'menu/' + category + '/' + name), datas);
 }
 
-function pad(n) {
-    return (n < 10) ? ("0" + n) : n;
-}
-
 function writeOrderHistory(datas) {
-	set(ref(db, 'orderHistory-'+datas.date+'/' + Date.now()), datas);
+	return set(ref(db, 'orderHistory-'+datas.date+'/' + Date.now()), datas);
 }
 
 //var menuItems = {
