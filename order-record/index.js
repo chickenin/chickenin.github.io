@@ -43,16 +43,6 @@ function pad(n) {
 }
 
 function writeOrderHistory(datas) {
-	var dateObj = new Date();
-	var month = pad(dateObj.getMonth() + 1); //months from 1-12
-	var day = pad(dateObj.getDate());
-	var year = dateObj.getFullYear();
-	var hour = pad(dateObj.getHours());
-	var minute = pad(dateObj.getMinutes());
-	var second = pad(dateObj.getSeconds());
-
-	datas.date = year + "-" + month + "-" + day;
-	datas.time = hour + ":" + minute + ":" + second;
 	set(ref(db, 'orderHistory-'+datas.date+'/' + Date.now()), datas);
 }
 

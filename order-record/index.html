@@ -404,6 +404,18 @@
 				$(".menu-done-btn").each(function(){
 					$(this).bind(myUp, function(e){
 						dataOrder = $($(this).parent()).data();
+						
+						var dateObj = new Date();
+						var month = pad(dateObj.getMonth() + 1); //months from 1-12
+						var day = pad(dateObj.getDate());
+						var year = dateObj.getFullYear();
+						var hour = pad(dateObj.getHours());
+						var minute = pad(dateObj.getMinutes());
+						var second = pad(dateObj.getSeconds());
+
+						dataOrder.date = year + "-" + month + "-" + day;
+						dataOrder.time = hour + ":" + minute + ":" + second;
+						
 						pushOrderHistory = [];
 						if(localStorage.getItem("pushOrderHistory")){
 							pushOrderHistory=JSON.parse(localStorage.getItem("pushOrderHistory"));
@@ -679,6 +691,18 @@
 						const intervalDoneAllEntry = setInterval(function() {
 							
 							dataOrder = $($($(".menu-done-btn")[0]).parent()).data();
+
+							var dateObj = new Date();
+							var month = pad(dateObj.getMonth() + 1); //months from 1-12
+							var day = pad(dateObj.getDate());
+							var year = dateObj.getFullYear();
+							var hour = pad(dateObj.getHours());
+							var minute = pad(dateObj.getMinutes());
+							var second = pad(dateObj.getSeconds());
+
+							dataOrder.date = year + "-" + month + "-" + day;
+							dataOrder.time = hour + ":" + minute + ":" + second;
+							
 							pushOrderHistory = [];
 							if(localStorage.getItem("pushOrderHistory")){
 								pushOrderHistory=JSON.parse(localStorage.getItem("pushOrderHistory"));
